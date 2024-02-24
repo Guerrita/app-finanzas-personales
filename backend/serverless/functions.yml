@@ -1,0 +1,25 @@
+signup:
+  name: ${self:service}-signup-${self:provider.stage}
+  handler: src/auth/signup.signup
+  events:
+    - httpApi:
+        path: /signup
+        method: post
+
+login:
+  name: ${self:service}-login-${self:provider.stage}
+  handler: src/auth/login.login
+  environment:
+    userPoolId: {Ref: UserPool}
+  events:
+    - httpApi:
+        path: /login
+        method: post
+
+confirmSignup:
+  name: ${self:service}-confirmSignup-${self:provider.stage}
+  handler: src/auth/confirm_signup.confirm_signup
+  events:
+    - httpApi:
+        path: /confirm-signup
+        method: post

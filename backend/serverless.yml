@@ -1,14 +1,31 @@
-service: backend
+service: finapp-backend
 frameworkVersion: '3'
 
 provider:
   name: aws
   runtime: python3.9
+  # description: This is the backend service for the personal finances application.
+  # configValidationMode: error
+  stage: ${opt:stage, 'dev'}
+  httpApi:
+    cors: true
+  environment:
+    clientId: {Ref: UserClient}
+  iam:
+    role:
+        statements:
+          - Effect: Allow
+            Action:
+              - cognito-idp:*
+            Resource:
+              - !Sub "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/${UserPool}"
+
+custom:
+  serviceName: ${self:service}
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - httpApi:
-          path: /
-          method: get
+  - ${file(serverless/functions.yml)}
+
+resources:
+  # - ${file(serverless/resources.yml)}
+  - ${file(serverless/cognito.yml)}

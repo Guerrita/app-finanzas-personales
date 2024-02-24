@@ -1,0 +1,30 @@
+Resources:
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: ${self:service}-userPool-${self:provider.stage}
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: true
+          RequireUppercase: true
+          RequireSymbols: true
+      AutoVerifiedAttributes: ["email"]
+
+  UserClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: ${self:service}-userClient-${self:provider.stage}
+      GenerateSecret: false
+      UserPoolId: { Ref: UserPool }
+      TokenValidityUnits:
+        AccessToken: hours
+        IdToken: hours
+        RefreshToken: days
+      AccessTokenValidity: 3
+      IdTokenValidity: 3
+      RefreshTokenValidity: 5
+      ExplicitAuthFlows:
+        - "ADMIN_NO_SRP_AUTH"
