@@ -22,10 +22,11 @@ provider:
 
 custom:
   serviceName: ${self:service}
+  serviceResource: FinappBackend
 
 functions:
   - ${file(serverless/functions.yml)}
 
 resources:
-  # - ${file(serverless/resources.yml)}
+  - ${file(serverless/resources.yml)}
   - ${file(serverless/cognito.yml)}
